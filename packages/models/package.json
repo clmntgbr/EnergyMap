@@ -1,0 +1,16 @@
+{
+  "name": "@social_blendr/models",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "luxon": "^3.4.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
