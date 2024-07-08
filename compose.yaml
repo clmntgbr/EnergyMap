@@ -1,0 +1,45 @@
+version: "3.5"
+
+services:
+  database:
+    container_name: ${PROJECT_NAME}_database
+    image: mariadb:10.4.19
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+    env_file:
+      - .env
+    networks:
+      - service
+    ports:
+      - 33182:3306
+    volumes:
+      - database_volume:/var/lib/mysql
+
+  rabbitmq:
+    restart: unless-stopped
+    container_name: ${PROJECT_NAME}_rabbitmq
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    env_file:
+      - .env
+    networks:
+      - service
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_VHOST: ${RABBITMQ_VHOST}
+    volumes:
+      - rabbitmq_volume:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+    ports:
+      - "8002:5672"
+      - "8003:15672"
+
+volumes:
+  rabbitmq_volume: {}
+  database_volume: {}
+
+networks:
+  service:
+    name: service

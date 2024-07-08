@@ -11,7 +11,8 @@
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "init": "node ace db:wipe && node ace migration:run && node ace db:truncate && node ace db:seed"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
@@ -43,6 +44,9 @@
     "@swc/core": "^1.6.5",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.14.9",
+    "@types/unzipper": "0.10.9",
+    "@types/uuid": "^10.0.0",
+    "@types/xml2js": "^0.4.14",
     "eslint": "^8.57.0",
     "hot-hook": "^0.2.6",
     "pino-pretty": "^11.2.1",
@@ -55,10 +59,19 @@
     "@adonisjs/core": "^6.12.1",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.1.0",
+    "@energy_map/enums": "workspace:*",
+    "@energy_map/models": "workspace:*",
+    "@energy_map/services": "workspace:*",
     "@vinejs/vine": "^2.1.0",
-    "reflect-metadata": "^0.2.2",
+    "adonis-rabbit": "^0.2.0",
+    "axios": "^1.7.2",
     "luxon": "^3.4.4",
-    "sqlite3": "5.1.7"
+    "mysql2": "^3.10.2",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "5.1.7",
+    "unzipper": "^0.12.1",
+    "uuid": "^10.0.0",
+    "xml2js": "^0.6.2"
   },
   "hotHook": {
     "boundaries": [
