@@ -3,16 +3,17 @@ version: "3.5"
 services:
   database:
     container_name: ${PROJECT_NAME}_database
-    image: mariadb:10.4.19
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+    image: kartoza/postgis:${POSTGRES_MAJOR_VERSION}-${POSTGIS_MAJOR_VERSION}.${POSTGIS_MINOR_RELEASE}
     env_file:
       - .env
-    networks:
-      - service
-    ports:
-      - 33182:3306
     volumes:
-      - database_volume:/var/lib/mysql
+      - database_volume:/var/lib/postgresql
+    environment:
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,postgis_topology,postgis_raster
+      - RUN_AS_ROOT=true
+    ports:
+      - "25432:5432"
+    restart: on-failure
 
   rabbitmq:
     restart: unless-stopped

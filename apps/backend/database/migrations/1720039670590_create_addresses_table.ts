@@ -13,8 +13,8 @@ export default class extends BaseSchema {
       table.string('station_id').notNullable()
       table.string('vicinity').notNullable()
       table.string('street').notNullable()
-      table.string('longitude').notNullable()
-      table.string('latitude').notNullable()
+      table.float('longitude').notNullable()
+      table.float('latitude').notNullable()
       table.string('postal_code').notNullable()
 
       table.string('region').nullable()

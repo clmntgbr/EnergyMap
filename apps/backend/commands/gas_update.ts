@@ -17,8 +17,7 @@ export default class GasUpdate extends BaseCommand {
     staysAlive: false,
   }
 
-  // validPrefixes = ['75', '94', '91', '92', '93', '95']
-  validPrefixes = ['94']
+  validPrefixes = ['75', '94', '91', '92', '93', '95']
 
   async run() {
     const gasUpdateService = new GasUpdateService()
@@ -44,19 +43,36 @@ export default class GasUpdate extends BaseCommand {
       }
 
       const address = await gasUpdateService.updateOrCreateAddress(data)
-      gasUpdateService.updateOrCreateStation(data, address)
+      const station = await gasUpdateService.updateOrCreateStation(data, address)
+
+      await station.load('prices')
+      for (const priceInMap of station.prices) {
+        await priceInMap.load('type')
+      }
 
       for (const price of data.prix ?? []) {
         const date = DateTime.fromFormat(price.$.maj, 'yyyy-MM-dd HH:mm:ss')
         const type = await gasUpdateService.firstOrCreateType(price)
 
+        const hasToBeCreated = await gasUpdateService.priceHasToBeCreated(date, station, type)
+
+        if (!hasToBeCreated.needsUpdate) {
+          continue
+        }
+
         emitter.emit('price:create', [
           {
-            stationId: data.$.id,
+            stationId: station.id,
+            stationRelated: data.$.id,
             datetimestamp: date.toSeconds().toString(),
             value: price.$.valeur,
-            date: date,
             typeId: type.id,
+          },
+        ])
+
+        emitter.emit('price:update', [
+          {
+            priceId: hasToBeCreated.priceId,
           },
         ])
       }

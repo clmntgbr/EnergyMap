@@ -1,11 +1,25 @@
 <script setup lang="ts">
+import type { LatLng } from "leaflet";
 import type { Tile } from "~/types/tiles";
-const map = useState();
-const zoom = useState("zoom", () => 13);
+
+const map = useState<any | null>();
+const zoom = useState("zoom", () => 11);
 const tiles = useState<Tile[]>(GetTiles);
 const selectedTile = useState<Tile>(GetTile);
 
-const onMapReady = () => {};
+let stations = await handleGetStationsMap(48.8534951, 2.3483915, zoom.value);
+
+const onMapReady = async () => {
+  stations = await handleGetStationsMap(48.8534951, 2.3483915, zoom.value);
+  console.log(map.value);
+
+  if (map.value.leafletObject) {
+    map.value.leafletObject.on("moveend", async () => {
+      const center: LatLng = map.value.leafletObject.getCenter();
+      stations = await handleGetStationsMap(center.lat, center.lng, zoom.value);
+    });
+  }
+};
 </script>
 
 <template>
@@ -19,10 +33,15 @@ const onMapReady = () => {};
       @ready="onMapReady"
     >
       <LTileLayer :url="selectedTile.url" />
-      <LLayerGroup> </LLayerGroup>
-      <LMarker :lat-lng="[48.7653376, 2.3691264]">
-        <LPopup> Hi! You can call me Circle Marker! </LPopup>
-      </LMarker>
+      <LLayerGroup v-if="stations.data">
+        <LMarker
+          v-for="station in stations.data.value"
+          :key="station.uuid"
+          :lat-lng="[station.address.latitude, station.address.longitude]"
+        >
+          <LPopup>{{ station.address.vicinity }}</LPopup>
+        </LMarker>
+      </LLayerGroup>
     </LMap>
   </div>
 </template>

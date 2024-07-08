@@ -1,18 +1,16 @@
 {
-    "compilerOptions": {
-        "baseUrl": "./*",
-        "outDir": "./dist",
-        "isolatedModules": true,
-        "declaration": true,
-        "declarationMap": true,
-        "sourceMap": true,
-        "removeComments": false
-    },
-    "scripts": {
-        "build": "npx tsc --build",
-        "dev": "npx tsc --watch",
-    },
-    "include": [
-        "./*"
-    ]
+  "compilerOptions": {
+    "baseUrl": "./*",
+    "outDir": "./dist",
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false
+  },
+  "scripts": {
+    "build": "npx tsc --build",
+    "dev": "npx tsc --watch"
+  },
+  "include": ["./*"]
 }
