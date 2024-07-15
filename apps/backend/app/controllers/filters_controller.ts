@@ -28,11 +28,6 @@ export default class FiltersController {
     return filteredResult.map((row) => ({
       uuid: uuidv4(),
       name: row.region.toLowerCase().replace(/^\w/, (c: string) => c.toUpperCase()),
-      reference: row.region
-        .toLowerCase()
-        .trim()
-        .replace(/[\s\W-]+/g, '-')
-        .replace(/^-+|-+$/g, ''),
     }))
   }
 }

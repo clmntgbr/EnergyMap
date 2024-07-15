@@ -1,117 +1,95 @@
 [
   {
     "uuid": "32e86474-36df-4bb8-bfb8-05c8e04c38f1",
-    "reference": "toilettes-publiques",
     "name": "Toilettes publiques"
   },
   {
     "uuid": "dd7c3a80-73fe-4be5-a6f9-c30cbb41d996",
-    "reference": "boutique-alimentaire",
     "name": "Boutique alimentaire"
   },
   {
     "uuid": "90ffec7f-f674-416b-86fc-9cf430625743",
-    "reference": "boutique-non-alimentaire",
     "name": "Boutique non alimentaire"
   },
   {
     "uuid": "ec297158-5dfb-486b-ac9b-d1f66d0655b8",
-    "reference": "station-de-gonflage",
     "name": "Station de gonflage"
   },
   {
     "uuid": "1064f246-271f-4609-b1d7-a63455aa905b",
-    "reference": "piste-poids-lourds",
     "name": "Piste poids lourds"
   },
   {
     "uuid": "d2a8ca0f-227e-4c36-aba8-23b10a0e37e6",
-    "reference": "lavage-manuel",
     "name": "Lavage manuel"
   },
   {
     "uuid": "e5bbe78f-43b5-4ea1-9ce1-60c29f4ec606",
-    "reference": "vente-de-gaz-domestique-butane-propane",
     "name": "Vente de gaz domestique (Butane, Propane)"
   },
   {
     "uuid": "232ecbce-63b3-456c-9f04-97b2b338a192",
-    "reference": "dab-distributeur-automatique-de-billets",
     "name": "DAB (Distributeur automatique de billets)"
   },
   {
     "uuid": "53d2028c-ff05-4068-bbd7-a7d36085d666",
-    "reference": "automate-cb-24-24",
     "name": "Automate CB 24/24"
   },
   {
     "uuid": "bfff4a41-500a-4645-aa2f-77e87919e674",
-    "reference": "carburant-additiv",
     "name": "Carburant additivé"
   },
   {
     "uuid": "08089c84-85a3-43cc-9c48-9ab77eba6419",
-    "reference": "relais-colis",
     "name": "Relais colis"
   },
   {
     "uuid": "6315f0df-64cf-4a41-a894-b58fda5c3b31",
-    "reference": "services-r-paration-entretien",
     "name": "Services réparation / entretien"
   },
   {
     "uuid": "3ce7e8d3-2928-4886-bfaf-98e954738cb2",
-    "reference": "vente-d-additifs-carburants",
     "name": "Vente d'additifs carburants"
   },
   {
     "uuid": "b6483885-761b-4964-b3da-476ce429a589",
-    "reference": "aire-de-camping-cars",
     "name": "Aire de camping-cars"
   },
   {
     "uuid": "82b93213-4611-4b39-814f-245e15616f4a",
-    "reference": "lavage-automatique",
     "name": "Lavage automatique"
   },
-  { "uuid": "017c55ef-16d3-48b9-86e5-d849ae47e41a", "reference": "laverie", "name": "Laverie" },
+  { "uuid": "017c55ef-16d3-48b9-86e5-d849ae47e41a", "name": "Laverie" },
   {
     "uuid": "d60b4e94-8c8c-4d1c-a272-382f2d4ca893",
-    "reference": "location-de-v-hicule",
     "name": "Location de véhicule"
   },
   {
     "uuid": "cdda62d2-0227-48b6-99a4-13d027e13e1a",
-    "reference": "bornes-lectriques",
     "name": "Bornes électriques"
   },
   {
     "uuid": "5c90044f-6950-4efb-b0db-9a028fb31dec",
-    "reference": "vente-de-p-trole-lampant",
     "name": "Vente de pétrole lampant"
   },
-  { "uuid": "725e2acf-ccf5-4e0e-9071-21d1ae3e5a2b", "reference": "wifi", "name": "Wifi" },
-  { "uuid": "4b43053e-2946-4591-a652-dfc260ee0eb6", "reference": "bar", "name": "Bar" },
+  { "uuid": "725e2acf-ccf5-4e0e-9071-21d1ae3e5a2b", "name": "Wifi" },
+  { "uuid": "4b43053e-2946-4591-a652-dfc260ee0eb6", "name": "Bar" },
   {
     "uuid": "4beec5cb-f0c9-49c4-bcee-fd78412db755",
-    "reference": "restauration-emporter",
     "name": "Restauration à emporter"
   },
   {
     "uuid": "ac7a2aa0-9d5f-4430-989e-c509c1a64a46",
-    "reference": "restauration-sur-place",
     "name": "Restauration sur place"
   },
   {
     "uuid": "2a391a80-3c47-41f7-a8e4-58c11bfdfb65",
-    "reference": "espace-b-b",
     "name": "Espace bébé"
   },
   {
     "uuid": "924fab8b-4526-4755-bc1b-0fcf96610886",
-    "reference": "vente-de-fioul-domestique",
     "name": "Vente de fioul domestique"
   },
-  { "uuid": "24bc7357-2eff-4a36-8c28-8cf639813b65", "reference": "douches", "name": "Douches" },
-  { "uuid": "ba2a93db-479d-4d79-949c-9cd227b8174f", "reference": "gnv", "name": "GNV" }
+  { "uuid": "24bc7357-2eff-4a36-8c28-8cf639813b65", "name": "Douches" },
+  { "uuid": "ba2a93db-479d-4d79-949c-9cd227b8174f", "name": "GNV" }
 ]
