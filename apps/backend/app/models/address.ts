@@ -17,19 +17,19 @@ export default class Address extends BaseModel implements IAddress {
   declare vicinity: string
 
   @column()
-  declare street: string
+  declare street: string | null
 
   @column()
   declare number: string | null
 
   @column()
-  declare city: string
+  declare city: string | null
 
   @column()
   declare region: string
 
   @column()
-  declare postalCode: string
+  declare postalCode: string | null
 
   @column()
   declare country: string

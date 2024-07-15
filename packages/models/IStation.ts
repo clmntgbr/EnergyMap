@@ -11,6 +11,7 @@ export interface IStation {
   name: string | null;
   status: string;
   element: string;
+  services: string;
   address: IAddress;
   addressId: number;
   prices: IPrice[];

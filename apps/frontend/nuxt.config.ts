@@ -1,11 +1,26 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/leaflet"],
+  css: ["~/assets/css/main.css"],
+  modules: [
+    "@nuxt/ui",
+    "@nuxt/fonts",
+    "@nuxt/content",
+    "@nuxtjs/tailwindcss",
+    "@nuxtjs/leaflet",
+  ],
+  build: {
+    transpile: [],
+  },
+  components: [
+    {
+      path: "~/components",
+      pathPrefix: true,
+    },
+  ],
   runtimeConfig: {
     public: {
       api: "",
       api_url: "",
+      default: { type: "", longitude: "", latitude: "", radius: "" },
     },
   },
 });

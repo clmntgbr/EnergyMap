@@ -1,9 +1,10 @@
 import type { IStation } from "@energy_map/models/IStation.js";
 
 export const handleGetStationsMap = async (
-  latitude: number,
-  longitude: number,
-  zoom: number
+  latitude: number | null = null,
+  longitude: number | null = null,
+  radius: number | null = null,
+  type: string | null = null
 ): Promise<{
   status: boolean;
   message: string | null;
@@ -15,7 +16,7 @@ export const handleGetStationsMap = async (
     "GetStationsMap",
     () =>
       $fetch(
-        `${runtimeConfig.public.api_url}/stations/map?latitude=${latitude}&longitude=${longitude}&zoom=${zoom}`
+        `${runtimeConfig.public.api_url}/api/stations/map?latitude=${latitude}&longitude=${longitude}&radius=${radius}&type=${type}`
       )
   );
 

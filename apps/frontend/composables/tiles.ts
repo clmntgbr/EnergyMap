@@ -16,5 +16,5 @@ export function GetTiles() {
 }
 
 export function GetTile() {
-  return GetTiles()[0];
+  return GetTiles()[2];
 }

@@ -6,7 +6,7 @@ import { StationType } from '@energy_map/enums/station_type.js'
 import { DateTime } from 'luxon'
 
 export default class GasUpdateService {
-  async updateOrCreateAddress(data: any): Promise<Address> {
+  async firstOrCreateAddress(data: any): Promise<Address> {
     const searchPayload = {
       stationId: data.$.id,
     }
@@ -23,7 +23,7 @@ export default class GasUpdateService {
       postalCode: data.$.cp,
     }
 
-    return await Address.updateOrCreate(searchPayload, persistancePayload)
+    return await Address.firstOrCreate(searchPayload, persistancePayload)
   }
 
   async firstOrCreateType(price: any): Promise<Type> {
@@ -37,7 +37,30 @@ export default class GasUpdateService {
     })
   }
 
-  async updateOrCreateStation(data: any, address: Address): Promise<Station> {
+  async addStationServices(station: Station, services: string[] | undefined) {
+    if (!services) {
+      return station
+    }
+
+    const data = []
+
+    for (const service of services) {
+      const key = service
+        .toLowerCase()
+        .trim()
+        .replace(/[\s\W-]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+
+      data.push({ [key]: service })
+    }
+
+    station.services = JSON.stringify(data)
+    await station.save()
+
+    return station
+  }
+
+  async firstOrCreateStation(data: any, address: Address): Promise<Station> {
     const stationService = new StationService()
 
     const searchPayload = {
@@ -52,7 +75,7 @@ export default class GasUpdateService {
       addressId: address.id,
     }
 
-    return await Station.updateOrCreate(searchPayload, persistancePayload)
+    return await Station.firstOrCreate(searchPayload, persistancePayload)
   }
 
   async priceHasToBeCreated(date: DateTime, station: Station, type: Type) {

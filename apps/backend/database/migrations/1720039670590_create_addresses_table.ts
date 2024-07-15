@@ -9,17 +9,16 @@ export default class extends BaseSchema {
       table.uuid('uuid')
 
       table.string('number').nullable()
-
-      table.string('station_id').notNullable()
-      table.string('vicinity').notNullable()
-      table.string('street').notNullable()
-      table.float('longitude').notNullable()
-      table.float('latitude').notNullable()
-      table.string('postal_code').notNullable()
-
+      table.string('postal_code').nullable()
+      table.string('street').nullable()
       table.string('region').nullable()
       table.string('city').nullable()
       table.string('country').nullable()
+
+      table.string('station_id').notNullable()
+      table.string('vicinity').notNullable()
+      table.float('longitude').notNullable()
+      table.float('latitude').notNullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

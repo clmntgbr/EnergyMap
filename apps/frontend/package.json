@@ -13,10 +13,22 @@
     "@energy_map/enums": "workspace:*",
     "@energy_map/models": "workspace:*",
     "@energy_map/services": "workspace:*",
+    "@nuxt/content": "^2.12.1",
+    "@nuxt/fonts": "^0.6.1",
+    "@nuxt/ui": "^2.17.0",
+    "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/leaflet": "^1.0.14",
-    "@nuxtjs/tailwindcss": "^6.12.0",
+    "@radix-icons/vue": "^1.0.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "nuxt": "^3.12.3",
-    "vue": "latest"
+    "radix-vue": "^1.9.1",
+    "shadcn-nuxt": "^0.10.4",
+    "tailwind-merge": "^2.4.0",
+    "tailwindcss-animate": "^1.0.7",
+    "vue": "^3.4.21"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.12.0"
+  }
 }

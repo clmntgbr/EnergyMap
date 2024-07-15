@@ -16,6 +16,7 @@ export default class extends BaseSchema {
       table.string('pop').notNullable()
       table.string('status').notNullable()
       table.text('element').notNullable()
+      table.json('services').nullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

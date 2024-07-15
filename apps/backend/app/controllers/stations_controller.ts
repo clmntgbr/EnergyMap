@@ -4,11 +4,13 @@ import db from '@adonisjs/lucid/services/db'
 
 export default class StationsController {
   async getStationsMap({ request, response }: HttpContext) {
-    const latitude = request.input('latitude')
-    const longitude = request.input('longitude')
+    const latitude = Number.parseFloat(request.qs().latitude)
+    const longitude = Number.parseFloat(request.qs().longitude)
+    const radius = Number.parseFloat(request.qs().radius)
+    const type = request.qs().type === 'null' ? null : request.qs().type
 
-    if (!latitude || !longitude) {
-      response.abort({ message: 'Missing either latitude or longitude.' })
+    if (!latitude || !longitude || !radius || !type) {
+      return []
     }
 
     const sql = await db.rawQuery(
@@ -22,17 +24,22 @@ export default class StationsController {
         stations
       INNER JOIN
         addresses ON stations.address_id = addresses.id
+      INNER JOIN
+        prices ON stations.id = prices.station_id
+      INNER JOIN
+        types ON prices.type_id = types.id
       WHERE
         ST_DWithin(
           ST_MakePoint(addresses.longitude, addresses.latitude)::geography,
           ST_MakePoint(?, ?)::geography,
           ?
         )
+        AND types.uuid = ?
       ORDER BY
         distance
-      LIMIT 50
+      LIMIT 500
       `,
-      [longitude, latitude, longitude, latitude, 500 * 1000]
+      [longitude, latitude, longitude, latitude, radius / 2, type]
     )
 
     const stationIds = sql.rows.map((row: any) => row.id)

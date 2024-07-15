@@ -5,11 +5,11 @@ export interface IAddress {
   uuid: string;
   stationId: string;
   vicinity: string;
-  street: string;
+  street: string | null;
   number: string | null;
-  city: string;
+  city: string | null;
   region: string;
-  postalCode: string;
+  postalCode: string | null;
   country: string;
   longitude: number;
   latitude: number;

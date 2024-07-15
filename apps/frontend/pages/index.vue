@@ -2,27 +2,62 @@
 import type { LatLng } from "leaflet";
 import type { Tile } from "~/types/tiles";
 
-const map = useState<any | null>();
-const zoom = useState("zoom", () => 11);
-const tiles = useState<Tile[]>(GetTiles);
-const selectedTile = useState<Tile>(GetTile);
+const map = ref<any | null>(null);
+const zoom = ref(12);
+const tiles = ref<Tile[]>(GetTiles());
+const selectedTile = ref<Tile>(GetTile());
 
-let stations = await handleGetStationsMap(48.8534951, 2.3483915, zoom.value);
+const typeCookieUuid = useCookie<string>("typeUuid");
+
+if (!typeCookieUuid.value) {
+  typeCookieUuid.value = "ebc50145-911a-46ea-beb3-b952af6ce3f4";
+}
+
+const isFilterOpen = useState<boolean>("isFilterOpen", () => false);
+const typeUuid = useState<string>(
+  "SelectedTypeUuid",
+  () => typeCookieUuid.value
+);
+
+let stations = await handleGetStationsMap();
+
+const fetchStationsMap = async () => {
+  if (map.value.leafletObject) {
+    const center: LatLng = map.value.leafletObject.getCenter();
+    stations = await handleGetStationsMap(
+      center.lat,
+      center.lng,
+      calculateRadius(map.value.leafletObject),
+      typeUuid.value
+    );
+  }
+};
 
 const onMapReady = async () => {
-  stations = await handleGetStationsMap(48.8534951, 2.3483915, zoom.value);
-  console.log(map.value);
-
   if (map.value.leafletObject) {
+    fetchStationsMap();
     map.value.leafletObject.on("moveend", async () => {
-      const center: LatLng = map.value.leafletObject.getCenter();
-      stations = await handleGetStationsMap(center.lat, center.lng, zoom.value);
+      fetchStationsMap();
     });
   }
 };
+
+const calculateRadius = (map: any) => {
+  const center = map.getCenter();
+  const bounds = map.getBounds();
+  return center.distanceTo(bounds.getNorthWest());
+};
+
+watch(isFilterOpen, () => {
+  console.log(isFilterOpen);
+  if (!isFilterOpen.value) {
+    fetchStationsMap();
+  }
+});
 </script>
 
 <template>
+  <FilterSheet />
   <div style="height: 100vh; width: 100vw">
     <LMap
       ref="map"
@@ -33,7 +68,7 @@ const onMapReady = async () => {
       @ready="onMapReady"
     >
       <LTileLayer :url="selectedTile.url" />
-      <LLayerGroup v-if="stations.data">
+      <LLayerGroup v-if="stations && stations.data?.value">
         <LMarker
           v-for="station in stations.data.value"
           :key="station.uuid"
@@ -46,4 +81,11 @@ const onMapReady = async () => {
   </div>
 </template>
 
-<style></style>
+<style>
+.buttonFilter {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+</style>

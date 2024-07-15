@@ -32,6 +32,9 @@ export default class Station extends BaseModel implements IStation {
   @column({ serializeAs: null })
   declare element: string
 
+  @column()
+  declare services: string
+
   @belongsTo(() => Address, { foreignKey: 'addressId' })
   declare address: BelongsTo<typeof Address>
 
