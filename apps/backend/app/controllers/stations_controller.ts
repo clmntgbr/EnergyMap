@@ -1,17 +1,26 @@
 import Station from '#models/station'
+import FilterService from '#services/filter'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 
+@inject()
 export default class StationsController {
-  async getStationsMap({ request, response }: HttpContext) {
+  constructor(protected filterService: FilterService) {}
+
+  async getStationsMap({ request }: HttpContext) {
     const latitude = Number.parseFloat(request.qs().latitude)
     const longitude = Number.parseFloat(request.qs().longitude)
     const radius = Number.parseFloat(request.qs().radius)
     const type = request.qs().type === 'null' ? null : request.qs().type
+    const services = request.qs().service
+    const departments = request.qs().department ?? []
 
     if (!latitude || !longitude || !radius || !type) {
       return []
     }
+
+    const departmentsFilter = await this.filterService.departments(departments)
 
     const sql = await db.rawQuery(
       `SELECT
@@ -19,7 +28,8 @@ export default class StationsController {
         ST_Distance(
           ST_MakePoint(addresses.longitude, addresses.latitude)::geography,
           ST_MakePoint(?, ?)::geography
-        ) AS distance
+        ) AS distance,
+        SUBSTRING(addresses.postal_code, 1, 2) as postalCode
       FROM
         stations
       INNER JOIN
@@ -35,6 +45,7 @@ export default class StationsController {
           ?
         )
         AND types.uuid = ?
+        ${departmentsFilter}
       ORDER BY
         distance
       LIMIT 500

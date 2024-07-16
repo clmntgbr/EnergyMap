@@ -18,7 +18,7 @@ export default class GasUpdate extends BaseCommand {
     staysAlive: false,
   }
 
-  validPrefixes = ['75', '94', '91', '92', '93']
+  // validPrefixes = ['75', '94', '91', '92', '93']
   // validPrefixes = ['94']
 
   async run() {
@@ -43,9 +43,9 @@ export default class GasUpdate extends BaseCommand {
     progressBar.start(datas.length, 0)
 
     for (const [index, data] of datas.entries()) {
-      if (!this.validPrefixes.includes(data.$.id.substring(0, 2))) {
-        continue
-      }
+      // if (!this.validPrefixes.includes(data.$.id.substring(0, 2))) {
+      //   continue
+      // }
 
       progressBar.update(index + 1)
 

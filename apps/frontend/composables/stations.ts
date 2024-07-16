@@ -45,11 +45,19 @@ const getUrl = (
   let url = `${runtimeConfig.public.api_url}/api/stations/map?latitude=${latitude}&longitude=${longitude}&radius=${radius}&type=${type}`;
 
   if (serviceUuids.length > 0) {
-    url = url + `&service=${serviceUuids}`;
+    if (serviceUuids.length === 1) {
+      url += `&service[]=${serviceUuids[0]}`;
+    } else {
+      url += `&service=${serviceUuids.join(",")}`;
+    }
   }
 
   if (departmentUuids.length > 0) {
-    url = url + `&department=${departmentUuids}`;
+    if (departmentUuids.length === 1) {
+      url += `&department[]=${departmentUuids[0]}`;
+    } else {
+      url += `&department=${departmentUuids.join(",")}`;
+    }
   }
 
   return url;

@@ -1,33 +1,20 @@
 import Type from '#models/type'
-import env from '#start/env'
-import { promises as fs } from 'node:fs'
+import FilterService from '#services/filter'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class FiltersController {
+  constructor(protected filterService: FilterService) {}
+
   async getTypes() {
     return await Type.all()
   }
 
   async getServices() {
-    const servicesJson = env.get('SERVICES_JSON', '')
-    const gasPublicPath = env.get('GAS_PUBLIC_PATH', '')
-
-    if (!servicesJson || !gasPublicPath) {
-      return
-    }
-
-    const content = await fs.readFile(`${gasPublicPath}/${servicesJson}`, 'utf8')
-    return JSON.parse(content)
+    return this.filterService.getServicesJson()
   }
 
   async getDepartments() {
-    const departmentsJson = env.get('DEPARTMENTS_JSON', '')
-    const gasPublicPath = env.get('GAS_PUBLIC_PATH', '')
-
-    if (!departmentsJson || !gasPublicPath) {
-      return
-    }
-
-    const content = await fs.readFile(`${gasPublicPath}/${departmentsJson}`, 'utf8')
-    return JSON.parse(content)
+    return this.filterService.getDepartmentsJson()
   }
 }

@@ -25,6 +25,7 @@ const selectedDepartmentUuids = useState<string[]>(
   "SelectedDepartmentUuids",
   () => []
 );
+
 const selectedDepartmentNames = useState<string[]>(
   "SelectedDepartmentName",
   () => []

@@ -6,4 +6,5 @@ export interface Service {
 export interface Department {
   uuid: string;
   name: string;
+  code: string;
 }
