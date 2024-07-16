@@ -19,7 +19,7 @@ import type { Service } from "~/types/filters";
 
 const open = ref(false);
 
-const services = await handleGetServices();
+const services = useState<Service[]>("services");
 
 const selectedServiceUuids = useState<string[]>(
   "SelectedServiceUuids",
@@ -68,9 +68,9 @@ const toggleService = (service: Service) => {
       <Command>
         <CommandInput class="h-9" placeholder="" />
         <CommandList>
-          <CommandGroup v-if="services.data?.value">
+          <CommandGroup v-if="services">
             <CommandItem
-              v-for="service in services.data.value"
+              v-for="service in services"
               :key="service.uuid"
               :value="service.uuid"
               multiple

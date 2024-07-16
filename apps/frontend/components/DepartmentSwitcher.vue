@@ -19,7 +19,7 @@ import type { Department } from "~/types/filters";
 
 const open = ref(false);
 
-const departments = await handleGetDepartments();
+const departments = useState<Department[]>("departments");
 
 const selectedDepartmentUuids = useState<string[]>(
   "SelectedDepartmentUuids",
@@ -70,9 +70,9 @@ const toggleDepartment = (department: Department) => {
       <Command>
         <CommandInput class="h-9" placeholder="" />
         <CommandList>
-          <CommandGroup v-if="departments.data?.value">
+          <CommandGroup v-if="departments">
             <CommandItem
-              v-for="department in departments.data.value"
+              v-for="department in departments"
               :key="department.uuid"
               :value="department.uuid"
               multiple

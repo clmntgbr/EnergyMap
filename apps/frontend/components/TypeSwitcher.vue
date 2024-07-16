@@ -13,12 +13,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import type { IType } from "@energy_map/models/IType";
 import { CaretSortIcon, CheckIcon } from "@radix-icons/vue";
 import { ref } from "vue";
 
 const open = ref(false);
 
-const types = await handleGetTypes();
+const types = useState<IType[]>("types");
 const typeCookieUuid = useCookie<string>("typeUuid");
 const typeCookieName = useCookie<string>("typeName");
 
@@ -58,9 +59,9 @@ const selectedTypeName = useState<string>(
       <Command>
         <CommandInput class="h-9" placeholder="" />
         <CommandList>
-          <CommandGroup v-if="types.data?.value">
+          <CommandGroup v-if="types">
             <CommandItem
-              v-for="type in types.data.value"
+              v-for="type in types"
               :key="type.uuid"
               :value="type.uuid"
               @select="

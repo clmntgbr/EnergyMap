@@ -65,6 +65,15 @@ watch(isFilterOpen, () => {
     fetchStationsMap();
   }
 });
+
+const types = await handleGetTypes();
+useState("types", () => types.data?.value);
+
+const departments = await handleGetDepartments();
+useState("departments", () => departments.data?.value);
+
+const services = await handleGetServices();
+useState("services", () => services.data?.value);
 </script>
 
 <template>
