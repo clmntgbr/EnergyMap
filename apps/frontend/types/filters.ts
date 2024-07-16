@@ -3,7 +3,7 @@ export interface Service {
   name: string;
 }
 
-export interface Region {
+export interface Department {
   uuid: string;
   name: string;
 }

@@ -1,5 +1,5 @@
 import type { IType } from "@energy_map/models/IType";
-import type { Region, Service } from "~/types/filters";
+import type { Department, Service } from "~/types/filters";
 
 export const handleGetTypes = async (): Promise<{
   status: boolean;
@@ -45,15 +45,16 @@ export const handleGetServices = async (): Promise<{
   };
 };
 
-export const handleGetRegions = async (): Promise<{
+export const handleGetDepartments = async (): Promise<{
   status: boolean;
   message: string | null;
-  data: globalThis.Ref<Region[] | null> | null;
+  data: globalThis.Ref<Department[] | null> | null;
 }> => {
   const runtimeConfig = useRuntimeConfig();
 
-  const { data, status } = await useAsyncData<Region[]>("GetRegions", () =>
-    $fetch(`${runtimeConfig.public.api_url}/api/regions`)
+  const { data, status } = await useAsyncData<Department[]>(
+    "GetDepartments",
+    () => $fetch(`${runtimeConfig.public.api_url}/api/departments`)
   );
 
   if (status.value === "success") {

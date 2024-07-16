@@ -1,8 +1,6 @@
 import Type from '#models/type'
 import env from '#start/env'
-import db from '@adonisjs/lucid/services/db'
 import { promises as fs } from 'node:fs'
-import { v4 as uuidv4 } from 'uuid'
 
 export default class FiltersController {
   async getTypes() {
@@ -21,13 +19,15 @@ export default class FiltersController {
     return JSON.parse(content)
   }
 
-  async getRegions() {
-    const result = await db.from('addresses').distinct('region').limit(100).select('region')
-    const filteredResult = result.filter((row) => row.region !== null)
+  async getDepartments() {
+    const departmentsJson = env.get('DEPARTMENTS_JSON', '')
+    const gasPublicPath = env.get('GAS_PUBLIC_PATH', '')
 
-    return filteredResult.map((row) => ({
-      uuid: uuidv4(),
-      name: row.region.toLowerCase().replace(/^\w/, (c: string) => c.toUpperCase()),
-    }))
+    if (!departmentsJson || !gasPublicPath) {
+      return
+    }
+
+    const content = await fs.readFile(`${gasPublicPath}/${departmentsJson}`, 'utf8')
+    return JSON.parse(content)
   }
 }

@@ -19,6 +19,16 @@ const typeUuid = useState<string>(
   () => typeCookieUuid.value
 );
 
+const selectedServiceUuids = useState<string[]>(
+  "SelectedServiceUuids",
+  () => []
+);
+
+const selectedDepartmentUuids = useState<string[]>(
+  "SelectedDepartmentUuids",
+  () => []
+);
+
 let stations = await handleGetStationsMap();
 
 const fetchStationsMap = async () => {
@@ -28,7 +38,9 @@ const fetchStationsMap = async () => {
       center.lat,
       center.lng,
       calculateRadius(map.value.leafletObject),
-      typeUuid.value
+      typeUuid.value,
+      selectedServiceUuids.value,
+      selectedDepartmentUuids.value
     );
   }
 };
@@ -49,7 +61,6 @@ const calculateRadius = (map: any) => {
 };
 
 watch(isFilterOpen, () => {
-  console.log(isFilterOpen);
   if (!isFilterOpen.value) {
     fetchStationsMap();
   }

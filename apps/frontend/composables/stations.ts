@@ -4,7 +4,9 @@ export const handleGetStationsMap = async (
   latitude: number | null = null,
   longitude: number | null = null,
   radius: number | null = null,
-  type: string | null = null
+  type: string | null = null,
+  serviceUuids: string[] = [],
+  departmentUuids: string[] = []
 ): Promise<{
   status: boolean;
   message: string | null;
@@ -16,7 +18,7 @@ export const handleGetStationsMap = async (
     "GetStationsMap",
     () =>
       $fetch(
-        `${runtimeConfig.public.api_url}/api/stations/map?latitude=${latitude}&longitude=${longitude}&radius=${radius}&type=${type}`
+        getUrl(latitude, longitude, radius, type, serviceUuids, departmentUuids)
       )
   );
 
@@ -29,4 +31,26 @@ export const handleGetStationsMap = async (
     message: "Une erreur s'est produite. Veuillez réessayer plus tard.",
     data: null,
   };
+};
+
+const getUrl = (
+  latitude: number | null = null,
+  longitude: number | null = null,
+  radius: number | null = null,
+  type: string | null = null,
+  serviceUuids: string[] = [],
+  departmentUuids: string[] = []
+) => {
+  const runtimeConfig = useRuntimeConfig();
+  let url = `${runtimeConfig.public.api_url}/api/stations/map?latitude=${latitude}&longitude=${longitude}&radius=${radius}&type=${type}`;
+
+  if (serviceUuids.length > 0) {
+    url = url + `&service=${serviceUuids}`;
+  }
+
+  if (departmentUuids.length > 0) {
+    url = url + `&department=${departmentUuids}`;
+  }
+
+  return url;
 };

@@ -10,7 +10,7 @@ const isFilterOpen = useState<boolean>("isFilterOpen", () => false);
       <div class="p-4 flex-1">
         <TypeSwitcher />
         <ServiceSwitcher />
-        <RegionSwitcher />
+        <DepartmentSwitcher />
       </div>
     </USlideover>
   </div>

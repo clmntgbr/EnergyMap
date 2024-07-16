@@ -15,31 +15,39 @@ import {
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-icons/vue";
 import { ref } from "vue";
-import type { Region } from "~/types/filters";
+import type { Department } from "~/types/filters";
 
 const open = ref(false);
 
-const regions = await handleGetRegions();
+const departments = await handleGetDepartments();
 
-const selectedRegionUuids = useState<string[]>("SelectedRegionUuids", () => []);
-const selectedRegionNames = useState<string[]>("SelectedRegionName", () => []);
+const selectedDepartmentUuids = useState<string[]>(
+  "SelectedDepartmentUuids",
+  () => []
+);
+const selectedDepartmentNames = useState<string[]>(
+  "SelectedDepartmentName",
+  () => []
+);
 
-const getSelectedRegionNames = () => {
-  return selectedRegionNames.value.join(", ") || "";
+const getSelectedDepartmentNames = () => {
+  return selectedDepartmentNames.value.join(", ") || "";
 };
 
-const isRegionSelected = (uuid: string) => {
-  return selectedRegionUuids.value.some((region) => region === uuid);
+const isDepartmentSelected = (uuid: string) => {
+  return selectedDepartmentUuids.value.some(
+    (department) => department === uuid
+  );
 };
 
-const toggleRegion = (region: Region) => {
-  const index = selectedRegionNames.value.indexOf(region.name);
+const toggleDepartment = (department: Department) => {
+  const index = selectedDepartmentNames.value.indexOf(department.name);
   if (index === -1) {
-    selectedRegionNames.value.push(region.name);
-    selectedRegionUuids.value.push(region.uuid);
+    selectedDepartmentNames.value.push(department.name);
+    selectedDepartmentUuids.value.push(department.uuid);
   } else {
-    selectedRegionNames.value.splice(index, 1);
-    selectedRegionUuids.value.splice(index, 1);
+    selectedDepartmentNames.value.splice(index, 1);
+    selectedDepartmentUuids.value.splice(index, 1);
   }
 };
 </script>
@@ -54,23 +62,23 @@ const toggleRegion = (region: Region) => {
         class="w-[416px] justify-between h-auto"
         style="white-space: break-spaces"
       >
-        {{ getSelectedRegionNames() }}
-        <CaretSortIcon class="ml-2 h-4 w-4 shrink-0 oparegion-50" />
+        {{ getSelectedDepartmentNames() }}
+        <CaretSortIcon class="ml-2 h-4 w-4 shrink-0 opadepartment-50" />
       </Button>
     </PopoverTrigger>
     <PopoverContent class="w-full p-0" style="z-index: 10000">
       <Command>
         <CommandInput class="h-9" placeholder="" />
         <CommandList>
-          <CommandGroup v-if="regions.data?.value">
+          <CommandGroup v-if="departments.data?.value">
             <CommandItem
-              v-for="region in regions.data.value"
-              :key="region.uuid"
-              :value="region.uuid"
+              v-for="department in departments.data.value"
+              :key="department.uuid"
+              :value="department.uuid"
               multiple
               @select="
                 () => {
-                  toggleRegion(region);
+                  toggleDepartment(department);
                 }
               "
             >
@@ -78,11 +86,13 @@ const toggleRegion = (region: Region) => {
                 :class="
                   cn(
                     'mr-2 h-4 w-4',
-                    isRegionSelected(region.uuid) ? 'opacity-100' : 'opacity-0'
+                    isDepartmentSelected(department.uuid)
+                      ? 'opacity-100'
+                      : 'opacity-0'
                   )
                 "
               />
-              {{ region.name }}
+              {{ department.name }}
             </CommandItem>
           </CommandGroup>
         </CommandList>
