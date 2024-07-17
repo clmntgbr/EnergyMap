@@ -11,7 +11,7 @@ declare module '@adonisjs/core/types' {
 }
 
 export interface EventPriceCreate {
-  stationId: number
+  stationId: number | null
   stationRelated: string
   value: string
   datetimestamp: string

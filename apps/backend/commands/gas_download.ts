@@ -2,7 +2,6 @@ import FileSystem from '#services/file_system'
 import env from '#start/env'
 import { BaseCommand } from '@adonisjs/core/ace'
 import type { CommandOptions } from '@adonisjs/core/types/ace'
-import { promises as fs } from 'node:fs'
 
 export default class GasDownload extends BaseCommand {
   static commandName = 'gas:download'
@@ -23,30 +22,6 @@ export default class GasDownload extends BaseCommand {
       return
     }
 
-    fileSystem.delete(gasPublicPath, gasZip)
-    fileSystem.delete(gasPublicPath, gasJson)
-    fileSystem.delete('', fileSystem.find(gasPublicPath, new RegExp('\\.xml$', 'i')))
-
-    await fileSystem.download(gasUrl, gasZip, gasPublicPath)
-
-    if (!fileSystem.exist(gasPublicPath, gasZip)) {
-      return
-    }
-
-    await fileSystem.unzip(`${gasPublicPath}/${gasZip}`, gasPublicPath)
-
-    const xmlFile = fileSystem.find(gasPublicPath, new RegExp('\\.xml$', 'i'))
-
-    if (null === xmlFile) {
-      return
-    }
-
-    const xml = await fileSystem.loadXmlFile(xmlFile)
-    const json = JSON.stringify(xml.pdv_liste.pdv)
-
-    fs.writeFile(`${gasPublicPath}/${gasJson}`, json, 'utf-8')
-
-    fileSystem.delete(gasPublicPath, gasZip)
-    fileSystem.delete('', fileSystem.find(gasPublicPath, new RegExp('\\.xml$', 'i')))
+    fileSystem.invoke(gasPublicPath, gasZip, gasUrl, gasJson)
   }
 }

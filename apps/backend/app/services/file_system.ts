@@ -1,5 +1,6 @@
 import axios from 'axios'
 import * as fs from 'node:fs'
+import { promises as pfs } from 'node:fs'
 import * as path from 'node:path'
 import * as unzipper from 'unzipper'
 import { parseStringPromise } from 'xml2js'
@@ -82,5 +83,33 @@ export default class FileSystem {
     }
 
     return false
+  }
+
+  async invoke(gasPublicPath: string, gasZip: string, gasUrl: string, gasJson: string) {
+    this.delete(gasPublicPath, gasZip)
+    this.delete(gasPublicPath, gasJson)
+    this.delete('', this.find(gasPublicPath, new RegExp('\\.xml$', 'i')))
+
+    await this.download(gasUrl, gasZip, gasPublicPath)
+
+    if (!this.exist(gasPublicPath, gasZip)) {
+      return
+    }
+
+    await this.unzip(`${gasPublicPath}/${gasZip}`, gasPublicPath)
+
+    const xmlFile = this.find(gasPublicPath, new RegExp('\\.xml$', 'i'))
+
+    if (null === xmlFile) {
+      return
+    }
+
+    const xml = await this.loadXmlFile(xmlFile)
+    const json = JSON.stringify(xml.pdv_liste.pdv)
+
+    pfs.writeFile(`${gasPublicPath}/${gasJson}`, json, 'utf-8')
+
+    this.delete(gasPublicPath, gasZip)
+    this.delete('', this.find(gasPublicPath, new RegExp('\\.xml$', 'i')))
   }
 }

@@ -15,6 +15,7 @@ export default class extends BaseSchema {
       table.string('type').notNullable()
       table.string('pop').notNullable()
       table.string('status').notNullable()
+      table.boolean('has_low_prices').notNullable()
       table.text('element').notNullable()
       table.json('services').nullable()
 
