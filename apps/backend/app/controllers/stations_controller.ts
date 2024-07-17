@@ -8,12 +8,24 @@ import db from '@adonisjs/lucid/services/db'
 export default class StationsController {
   constructor(protected filterService: FilterService) {}
 
+  async getStationByUuid({ request }: HttpContext) {
+    const uuid = request.param('uuid')
+    const station = await Station.findBy('uuid', uuid)
+
+    await station?.load('address')
+    await station?.load('prices', (pricesQuery) => {
+      pricesQuery.preload('type')
+    })
+
+    return station
+  }
+
   async getStationsMap({ request }: HttpContext) {
     const latitude = Number.parseFloat(request.qs().latitude)
     const longitude = Number.parseFloat(request.qs().longitude)
     const radius = Number.parseFloat(request.qs().radius)
     const type = request.qs().type === 'null' ? null : request.qs().type
-    const services = request.qs().service
+    const services = request.qs().service ?? []
     const departments = request.qs().department ?? []
 
     if (!latitude || !longitude || !radius || !type) {
@@ -21,6 +33,7 @@ export default class StationsController {
     }
 
     const departmentsFilter = await this.filterService.departments(departments)
+    const servicesFilter = await this.filterService.services(services)
 
     const sql = await db.rawQuery(
       `SELECT
@@ -46,6 +59,7 @@ export default class StationsController {
         )
         AND types.uuid = ?
         ${departmentsFilter}
+        ${servicesFilter}
       ORDER BY
         distance
       LIMIT 500
@@ -61,6 +75,24 @@ export default class StationsController {
       .preload('prices', (pricesQuery) => {
         pricesQuery.preload('type')
       })
+
+    let lowestPriceStationUuid: string | null = null
+    let lowestPrice = Number.POSITIVE_INFINITY
+
+    stations.forEach((station) => {
+      station.prices.forEach((price) => {
+        if (price.type.uuid === type && Number.parseFloat(price.value) < lowestPrice) {
+          lowestPrice = Number.parseFloat(price.value)
+          lowestPriceStationUuid = station.uuid
+        }
+      })
+    })
+
+    stations.forEach((station) => {
+      if (lowestPriceStationUuid === station.uuid) {
+        station.hasLowPrices = true
+      }
+    })
 
     return stations
   }

@@ -24,6 +24,40 @@ export default class FilterService {
     return ''
   }
 
+  async services(services: string[]) {
+    if (services.length === 0) {
+      return ''
+    }
+
+    const json = await this.getServicesJson()
+    const result = []
+
+    for (const service of services) {
+      const data = this.findUuidInData(json, service)
+      if (data) {
+        result.push(data)
+      }
+    }
+
+    if (result.length > 0) {
+      return (
+        ' AND ' +
+        result
+          .map(
+            (service) =>
+              `services::jsonb @> '[{"${service.name
+                .toLowerCase()
+                .trim()
+                .replace(/[\s\W-]+/g, '-')
+                .replace(/^-+|-+$/g, '')}":"${service.name}"}]'::jsonb`
+          )
+          .join(' OR ')
+      )
+    }
+
+    return ''
+  }
+
   findUuidInData(data: any, uuidToFind: string) {
     for (const item of data) {
       if (item.uuid === uuidToFind) {

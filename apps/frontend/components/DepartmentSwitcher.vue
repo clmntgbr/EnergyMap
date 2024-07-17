@@ -18,6 +18,7 @@ import { ref } from "vue";
 import type { Department } from "~/types/filters";
 
 const open = ref(false);
+const searchQuery = ref("");
 
 const departments = useState<Department[]>("departments");
 
@@ -32,7 +33,7 @@ const selectedDepartmentNames = useState<string[]>(
 );
 
 const getSelectedDepartmentNames = () => {
-  return selectedDepartmentNames.value.join(", ") || "";
+  return selectedDepartmentNames.value.join(", ") || "Filtrer par départements";
 };
 
 const isDepartmentSelected = (uuid: string) => {
@@ -40,6 +41,15 @@ const isDepartmentSelected = (uuid: string) => {
     (department) => department === uuid
   );
 };
+
+const filter = computed(() => {
+  if (!searchQuery.value) {
+    return departments.value;
+  }
+  return departments.value.filter((department) =>
+    department.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 
 const toggleDepartment = (department: Department) => {
   const index = selectedDepartmentNames.value.indexOf(department.name);
@@ -60,22 +70,23 @@ const toggleDepartment = (department: Department) => {
         variant="outline"
         role="combobox"
         :aria-expanded="open"
-        class="w-[416px] justify-between h-auto"
+        class="w-[416px] justify-between h-auto py-3 font-medium text-left"
+        :class="selectedDepartmentUuids.length === 0 ? 'font-light' : ''"
         style="white-space: break-spaces"
       >
         {{ getSelectedDepartmentNames() }}
         <CaretSortIcon class="ml-2 h-4 w-4 shrink-0 opadepartment-50" />
       </Button>
     </PopoverTrigger>
-    <PopoverContent class="w-full p-0" style="z-index: 10000">
+    <PopoverContent class="w-[416px] p-0" style="z-index: 10000">
       <Command>
         <CommandInput class="h-9" placeholder="" />
         <CommandList>
-          <CommandGroup v-if="departments">
+          <CommandGroup v-if="filter">
             <CommandItem
-              v-for="department in departments"
+              v-for="department in filter"
               :key="department.uuid"
-              :value="department.uuid"
+              :value="department.name"
               multiple
               @select="
                 () => {

@@ -4,6 +4,7 @@ import router from '@adonisjs/core/services/router'
 
 router.group(() => {
   router.get('/api/stations/map', [StationsController, 'getStationsMap'])
+  router.get('/api/station/:uuid', [StationsController, 'getStationByUuid'])
   router.get('/api/types', [FiltersController, 'getTypes'])
   router.get('/api/services', [FiltersController, 'getServices'])
   router.get('/api/departments', [FiltersController, 'getDepartments'])

@@ -33,6 +33,31 @@ export const handleGetStationsMap = async (
   };
 };
 
+export const handleGetStationByUuid = async (
+  uuid: string
+): Promise<{
+  status: boolean;
+  message: string | null;
+  data: globalThis.Ref<IStation | null> | null;
+}> => {
+  const runtimeConfig = useRuntimeConfig();
+
+  const { data, status } = await useAsyncData<IStation>(
+    "GetStationByUuid",
+    () => $fetch(`${runtimeConfig.public.api_url}/api/station/${uuid}`)
+  );
+
+  if (status.value === "success") {
+    return { status: true, message: null, data: data };
+  }
+
+  return {
+    status: false,
+    message: "Une erreur s'est produite. Veuillez réessayer plus tard.",
+    data: null,
+  };
+};
+
 const getUrl = (
   latitude: number | null = null,
   longitude: number | null = null,

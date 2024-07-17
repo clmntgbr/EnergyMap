@@ -94,7 +94,22 @@ useState("services", () => services.data?.value);
           :key="station.uuid"
           :lat-lng="[station.address.latitude, station.address.longitude]"
         >
-          <LPopup>{{ station.address.vicinity }}</LPopup>
+          <LIcon
+            :icon-url="station.hasLowPrices ? 'icon_low.png' : 'icon.png'"
+            :icon-size="[40, 60]"
+          />
+          <LPopup>
+            <UButton
+              label="GoTo"
+              @click="
+                navigateTo(`/stations/${station.uuid}`, {
+                  open: {
+                    target: '_blank',
+                  },
+                })
+              "
+            />
+          </LPopup>
         </LMarker>
       </LLayerGroup>
     </LMap>

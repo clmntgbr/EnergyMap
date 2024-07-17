@@ -10,6 +10,7 @@ export interface IStation {
   pop: string;
   name: string | null;
   status: string;
+  hasLowPrices: boolean;
   element: string;
   services: string;
   address: IAddress;

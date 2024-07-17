@@ -35,6 +35,9 @@ export default class Station extends BaseModel implements IStation {
   @column()
   declare services: string
 
+  @column()
+  declare hasLowPrices: boolean
+
   @belongsTo(() => Address, { foreignKey: 'addressId' })
   declare address: BelongsTo<typeof Address>
 
@@ -57,5 +60,6 @@ export default class Station extends BaseModel implements IStation {
     super()
     this.uuid = uuidv4()
     this.status = StationStatus.CREATED
+    this.hasLowPrices = false
   }
 }

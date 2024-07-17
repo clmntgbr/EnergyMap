@@ -49,13 +49,13 @@ const selectedTypeName = useState<string>(
         variant="outline"
         role="combobox"
         :aria-expanded="open"
-        class="w-full justify-between"
+        class="w-[416px] justify-between h-auto py-3 font-medium text-left"
       >
         {{ selectedTypeName }}
         <CaretSortIcon class="ml-2 h-4 w-4 shrink-0 opacity-50" />
       </Button>
     </PopoverTrigger>
-    <PopoverContent class="w-full p-0" style="z-index: 10000">
+    <PopoverContent class="w-[416px] p-0" style="z-index: 10000">
       <Command>
         <CommandInput class="h-9" placeholder="" />
         <CommandList>

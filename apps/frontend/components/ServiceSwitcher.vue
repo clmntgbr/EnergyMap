@@ -18,6 +18,7 @@ import { ref } from "vue";
 import type { Service } from "~/types/filters";
 
 const open = ref(false);
+const searchQuery = ref("");
 
 const services = useState<Service[]>("services");
 
@@ -31,12 +32,24 @@ const selectedServiceNames = useState<string[]>(
 );
 
 const getSelectedServiceNames = () => {
-  return selectedServiceNames.value.join(", ") || "";
+  return selectedServiceNames.value.join(", ") || "Filtrer par services";
 };
 
 const isServiceSelected = (uuid: string) => {
   return selectedServiceUuids.value.some((service) => service === uuid);
 };
+
+const filter = computed(() => {
+  if (!searchQuery.value) {
+    return services.value;
+  }
+
+  console.log(searchQuery);
+
+  return services.value.filter((service) =>
+    service.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 
 const toggleService = (service: Service) => {
   const index = selectedServiceNames.value.indexOf(service.name);
@@ -57,22 +70,23 @@ const toggleService = (service: Service) => {
         variant="outline"
         role="combobox"
         :aria-expanded="open"
-        class="w-[416px] justify-between h-auto"
+        class="w-[416px] justify-between h-auto py-3 font-medium text-left"
+        :class="selectedServiceUuids.length === 0 ? 'font-light' : ''"
         style="white-space: break-spaces"
       >
         {{ getSelectedServiceNames() }}
         <CaretSortIcon class="ml-2 h-4 w-4 shrink-0 opacity-50" />
       </Button>
     </PopoverTrigger>
-    <PopoverContent class="w-full p-0" style="z-index: 10000">
+    <PopoverContent class="w-[416px] p-0" style="z-index: 10000">
       <Command>
         <CommandInput class="h-9" placeholder="" />
         <CommandList>
-          <CommandGroup v-if="services">
+          <CommandGroup v-if="filter">
             <CommandItem
-              v-for="service in services"
+              v-for="service in filter"
               :key="service.uuid"
-              :value="service.uuid"
+              :value="service.name"
               multiple
               @select="
                 () => {
