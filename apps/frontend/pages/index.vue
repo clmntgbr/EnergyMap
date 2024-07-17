@@ -3,7 +3,8 @@ import type { LatLng } from "leaflet";
 import type { Tile } from "~/types/tiles";
 
 const map = ref<any | null>(null);
-const zoom = ref(12);
+const userLocation = ref({ longitude: null, latitude: null });
+const zoom = ref(13);
 const tiles = ref<Tile[]>(GetTiles());
 const selectedTile = ref<Tile>(GetTile());
 
@@ -45,9 +46,30 @@ const fetchStationsMap = async () => {
   }
 };
 
+const setUserPosition = async (position: any) => {
+  map.value.leafletObject.setView(
+    [position.coords.latitude, position.coords.longitude],
+    zoom.value
+  );
+  userLocation.value = {
+    latitude: position.coords.latitude,
+    longitude: position.coords.longitude,
+  };
+};
+
+const setPositionRefused = async () => {
+  fetchStationsMap();
+};
+
 const onMapReady = async () => {
   if (map.value.leafletObject) {
-    fetchStationsMap();
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        setUserPosition,
+        setPositionRefused
+      );
+    }
+
     map.value.leafletObject.on("moveend", async () => {
       fetchStationsMap();
     });
@@ -88,6 +110,15 @@ useState("services", () => services.data?.value);
       @ready="onMapReady"
     >
       <LTileLayer :url="selectedTile.url" />
+      <LLayerGroup v-if="userLocation.latitude && userLocation.longitude">
+        <LMarker :lat-lng="[userLocation.latitude, userLocation.longitude]">
+          <LIcon
+            icon-url="icon_user.png"
+            :icon-size="[40, 60]"
+            className="zIndex"
+          />
+        </LMarker>
+      </LLayerGroup>
       <LLayerGroup v-if="stations && stations.data?.value">
         <LMarker
           v-for="station in stations.data.value"
@@ -95,6 +126,7 @@ useState("services", () => services.data?.value);
           :lat-lng="[station.address.latitude, station.address.longitude]"
         >
           <LIcon
+            :className="station.hasLowPrices ? 'zIndex' : ''"
             :icon-url="station.hasLowPrices ? 'icon_low.png' : 'icon.png'"
             :icon-size="[40, 60]"
           />
@@ -122,5 +154,8 @@ useState("services", () => services.data?.value);
   top: 20px;
   right: 20px;
   z-index: 1000;
+}
+.zIndex {
+  z-index: 20000 !important;
 }
 </style>
